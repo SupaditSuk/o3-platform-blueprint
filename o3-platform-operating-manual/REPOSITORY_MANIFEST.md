@@ -57,7 +57,7 @@ The Architecture Foundation phase establishes the complete architectural foundat
 | **06** | O³ Workforce Data Standard (OWDS) | 8 OWDS sheets with field-level specifications | ✅ Complete | v1.0.0 | FROZEN | Book 05 | Book 07, Book 08, Book 11 | All data source definitions |
 | **07** | Insight Engine Architecture | 15 Insights (INS-001 to INS-015), 8-stage lifecycle | ✅ Complete | v1.0.0 | FROZEN | Book 06, Book 08 | Book 12, Book 13 | Consumes KPI definitions from Book 08 |
 | **08** | Semantic Layer Architecture | 25 KPIs, 20 Measures, 17 Metrics, 17 Dimensions | ✅ Complete | v1.0.0 | FROZEN | Book 06 | Book 07, Book 10, Book 12, Book 13 | Single source of truth for all calculations |
-| **09** | Event Model Architecture | Platform events, event-driven workflows | ⬜ Pending | — | — | Book 06, Book 07, Book 08 | Book 10, Book 12, Book 13 | Next book to be written |
+| **09** | Event Architecture | 40+ events across 5 categories, lifecycle, governance | ✅ Complete | v1.0.0 | FROZEN | Book 06, Book 07, Book 08 | Book 10, Book 12, Book 13 | Enterprise Architecture level — no technology |
 | **10** | API Standards | REST API design, endpoints, versioning | ⬜ Pending | — | — | Book 07, Book 08, Book 09 | Book 11, Book 13, Book 19 | API design standards |
 | **11** | Database Architecture | Physical data model, schema, performance | ⬜ Pending | — | — | Book 06, Book 08, Book 10 | Book 16, Book 19 | Implements OWDS and Semantic Layer |
 | **12** | AI Architecture | AI Gateway, LLM integration, prompt engineering | ⬜ Pending | — | — | Book 07, Book 08, Book 09 | Book 13, Book 17 | AI capabilities for insights and recommendations |
