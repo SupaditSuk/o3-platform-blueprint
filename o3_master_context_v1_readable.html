@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O³ Master Context v1.0 — O³ ZONE</title>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter','Noto Sans Thai',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#1a1a1a;line-height:1.75;display:flex;min-height:100vh}
+a{color:#c00;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:280px;min-width:280px;background:#0d0d0d;color:#ccc;height:100vh;position:sticky;top:0;overflow-y:auto;padding:24px 20px;font-size:0.875rem;border-right:1px solid #222;z-index:100}
+.sidebar-logo{font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-0.5px}
+.sidebar-logo span{color:#c00}
+.sidebar-version{font-size:0.7rem;color:#666;margin-bottom:24px;text-transform:uppercase;letter-spacing:1px}
+.sidebar-nav{list-style:none}
+.sidebar-nav li{margin-bottom:2px}
+.sidebar-nav a{display:block;padding:6px 10px;border-radius:4px;color:#999;transition:all .15s;font-size:0.8rem}
+.sidebar-nav a:hover{background:#1a1a1a;color:#fff;text-decoration:none}
+.sidebar-nav a.active{background:#c00;color:#fff}
+.sidebar-nav .nav-section{font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:#555;margin-top:20px;margin-bottom:8px;padding-left:10px}
+
+/* ===== MAIN ===== */
+.main{flex:1;max-width:900px;padding:48px 64px 96px;overflow-x:hidden}
+
+/* ===== COVER ===== */
+.cover{min-height:90vh;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid #e5e5e5;margin-bottom:64px;padding-bottom:64px}
+.cover-badge{display:inline-block;background:#c00;color:#fff;padding:4px 14px;border-radius:3px;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
+.cover h1{font-size:3rem;font-weight:900;line-height:1.15;letter-spacing:-1px;margin-bottom:16px}
+.cover h1 span{color:#c00}
+.cover .subtitle{font-size:1.15rem;color:#555;max-width:600px;margin-bottom:32px;line-height:1.6}
+.cover .meta{font-size:0.8rem;color:#999;display:flex;gap:24px;flex-wrap:wrap}
+.cover .meta strong{color:#333}
+
+/* ===== SECTIONS ===== */
+section{margin-bottom:64px}
+section:target{scroll-margin-top:24px}
+.section-number{font-size:0.7rem;font-weight:700;color:#c00;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+h2{font-size:1.75rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;color:#0d0d0d}
+h3{font-size:1.2rem;font-weight:700;margin-top:32px;margin-bottom:12px;color:#1a1a1a}
+h4{font-size:1rem;font-weight:700;margin-top:24px;margin-bottom:8px;color:#333}
+p{margin-bottom:16px;color:#444}
+ul,ol{margin-bottom:16px;padding-left:24px}
+li{margin-bottom:6px;color:#444}
+
+/* ===== CALLOUTS ===== */
+.callout{border-left:4px solid;padding:16px 20px;margin:24px 0;border-radius:0 6px 6px 0;font-size:0.9rem}
+.callout-title{font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.callout p{margin-bottom:0;color:#444}
+.callout-principle{border-color:#c00;background:#fef5f5}
+.callout-principle .callout-title{color:#c00}
+.callout-decision{border-color:#1a1a1a;background:#f8f8f8}
+.callout-decision .callout-title{color:#1a1a1a}
+.callout-warning{border-color:#e6a817;background:#fffdf5}
+.callout-warning .callout-title{color:#b8860b}
+.callout-ai{border-color:#6c5ce7;background:#f8f7ff}
+.callout-ai .callout-title{color:#6c5ce7}
+.callout-founder{border-color:#0d0d0d;background:#f5f5f5}
+.callout-founder .callout-title{color:#0d0d0d}
+
+/* ===== CARDS ===== */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:24px 0}
+.card{background:#fafafa;border:1px solid #eaeaea;border-radius:8px;padding:20px;transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.06)}
+.card h4{font-size:0.95rem;margin-top:0;margin-bottom:8px;color:#0d0d0d}
+.card p{font-size:0.85rem;color:#666;margin-bottom:0}
+
+/* ===== TABLES ===== */
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.875rem}
+th{background:#0d0d0d;color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px}
+td{padding:10px 14px;border-bottom:1px solid #eaeaea;color:#444}
+tr:hover td{background:#fafafa}
+
+/* ===== DIAGRAMS (CSS) ===== */
+.diagram{margin:32px 0;padding:32px;background:#fafafa;border:1px solid #eaeaea;border-radius:8px;overflow-x:auto}
+.diagram-title{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#999;margin-bottom:20px;text-align:center}
+.flow-horizontal{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.flow-box{background:#fff;border:2px solid #0d0d0d;padding:12px 20px;border-radius:6px;font-weight:700;font-size:0.8rem;text-align:center;min-width:100px}
+.flow-box.highlight{border-color:#c00;background:#fef5f5;color:#c00}
+.flow-arrow{font-size:1.2rem;color:#999;font-weight:700}
+.flow-vertical{display:flex;flex-direction:column;align-items:center;gap:8px}
+.flow-vertical .flow-arrow{transform:rotate(90deg)}
+.layers{display:flex;flex-direction:column;gap:8px;max-width:500px;margin:0 auto}
+.layer{background:#fff;border:1px solid #ddd;padding:14px 20px;border-radius:6px;text-align:center;font-weight:600;font-size:0.85rem}
+.layer.top{border-color:#c00;background:#fef5f5}
+.layer-label{font-size:0.65rem;color:#999;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+
+/* ===== BACK TO TOP ===== */
+.back-to-top{position:fixed;bottom:32px;right:32px;width:44px;height:44px;background:#0d0d0d;color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.back-to-top.visible{opacity:1}
+.back-to-top:hover{background:#c00}
+
+/* ===== FOOTER ===== */
+.footer{border-top:1px solid #e5e5e5;padding-top:32px;margin-top:64px;font-size:0.8rem;color:#999}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.footer-item strong{display:block;color:#555;margin-bottom:4px;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  body{flex-direction:column}
+  .sidebar{width:100%;min-width:100%;height:auto;position:relative;padding:16px;border-right:none;border-bottom:1px solid #222}
+  .sidebar-nav{display:flex;flex-wrap:wrap;gap:4px}
+  .sidebar-nav li{margin-bottom:0}
+  .sidebar-nav .nav-section{width:100%;margin-top:12px}
+  .main{padding:24px 20px 64px}
+  .cover h1{font-size:2rem}
+  .cover{min-height:auto;padding-bottom:40px;margin-bottom:40px}
+  .card-grid{grid-template-columns:1fr}
+  .flow-horizontal{flex-direction:column}
+  .flow-arrow{transform:rotate(90deg)}
+  .back-to-top{bottom:16px;right:16px}
+}
+
+/* ===== PRINT ===== */
+@media print{
+  .sidebar,.back-to-top{display:none}
+  .main{max-width:100%;padding:0}
+  body{display:block}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">O³ <span>ZONE</span></div>
+  <div class="sidebar-version">Master Context v1.0</div>
+  <ul class="sidebar-nav">
+    <li class="nav-section">Overview</li>
+    <li><a href="#cover">Cover</a></li>
+    <li><a href="#executive-summary">Executive Summary</a></li>
+    <li><a href="#why-this-exists">Why This Exists</a></li>
+    <li><a href="#how-ai-uses">How AI Agents Use This</a></li>
+    <li class="nav-section">Strategy</li>
+    <li><a href="#vision">Vision & Mission</a></li>
+    <li><a href="#business-model">Business Model</a></li>
+    <li><a href="#product-portfolio">Product Portfolio</a></li>
+    <li class="nav-section">Architecture</li>
+    <li><a href="#platform-principles">Platform Principles</a></li>
+    <li><a href="#domain-model">Domain Model</a></li>
+    <li><a href="#owds">OWDS Overview</a></li>
+    <li><a href="#ai-strategy">AI Strategy</a></li>
+    <li><a href="#architecture">Architecture Overview</a></li>
+    <li><a href="#tech-stack">Technology Stack</a></li>
+    <li class="nav-section">Execution</li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#vocabulary">Vocabulary / Glossary</a></li>
+    <li><a href="#decisions">Decision Records</a></li>
+    <li><a href="#prompt">Prompt for Future AI</a></li>
+    <li class="nav-section">Part X</li>
+    <li><a href="#implementation-roadmap">Implementation Roadmap</a></li>
+    <li><a href="#ai-operating-instructions">AI Operating Instructions</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- COVER -->
+<section class="cover" id="cover">
+  <div class="cover-badge">Master Context Document</div>
+  <h1>O³ <span>Master Context</span><br>สำหรับ Founder และ AI Agent</h1>
+  <p class="subtitle">เอกสารกลางที่รวบรวม วิสัยทัศน์ กลยุทธ์ สถาปัตยกรรม ข้อมูล AI และ Product Roadmap ทั้งหมดของ O³ ZONE — อ่านจบในที่เดียว เข้าใจทั้ง Platform</p>
+  <div class="meta">
+    <div><strong>Version</strong><br>v1.0 Draft</div>
+    <div><strong>Status</strong><br>Living Context Document</div>
+    <div><strong>Owner</strong><br>O³ ZONE</div>
+    <div><strong>Last Updated</strong><br>June 2026</div>
+  </div>
+</section>
+
+<!-- EXECUTIVE SUMMARY -->
+<section id="executive-summary">
+  <div class="section-number">Section 01</div>
+  <h2>Executive Summary</h2>
+  <p><strong>O³ ZONE</strong> คือ <strong>AI-powered Workforce Intelligence Platform</strong> ที่ช่วย SME ไทยและองค์กรที่กำลังเติบโต เปลี่ยนข้อมูลบริษัทและ HR พื้นฐาน ให้กลายเป็น Workforce Insights, Business Recommendations และ Action Plans ที่นำไปใช้ได้จริง</p>
+  <p>O³ ไม่ใช่แค่ Dashboard, ไม่ใช่ HRIS, ไม่ใช่ Chatbot — แต่เป็น <strong>Platform</strong> ที่รวม Data, AI, Insight Engine, Academy และ Benchmark Center ไว้ด้วยกันบนรากฐานเดียวกัน</p>
+
+  <div class="callout callout-founder">
+    <div class="callout-title">Founder Note</div>
+    <p>O³ ถูกออกแบบให้ SME ไทยใช้งานได้ภายในไม่กี่นาที — อัปโหลดไฟล์ Excel ไฟล์เดียว ระบบจะตรวจสอบคุณภาพข้อมูล สรุปภาพรวมกำลังคน ชี้ความเสี่ยง แนะนำ Action Plan และให้ AI อธิบายทุกอย่างเป็นภาษาไทยที่เข้าใจง่าย</p>
+  </div>
+</section>
+
+<!-- WHY THIS EXISTS -->
+<section id="why-this-exists">
+  <div class="section-number">Section 02</div>
+  <h2>Why This Document Exists</h2>
+  <p>O³ ZONE เป็น Platform ที่ซับซ้อนระดับหนึ่ง การตัดสินใจเรื่อง Architecture, Data Model, AI Strategy และ Product Scope ต้องมี <strong>แหล่งความจริงเพียงหนึ่งเดียว</strong> ที่ทุกคน — Founder, Developer, AI Agent, Product Team — ใช้อ้างอิงร่วมกัน</p>
+  <p>เอกสารนี้คือ <strong>Master Context</strong> ที่รวบรวมทุกการตัดสินใจสำคัญของ O³ ไว้ในที่เดียว ก่อนที่จะแตกออกเป็น Handbook, Product Spec, Developer Spec, Prototype หรือ Code จริง</p>
+
+  <div class="callout callout-decision">
+    <div class="callout-title">Important Decision</div>
+    <p>Documentation และ Architecture ต้องมาก่อนการเขียนโค้ดเสมอ — นี่คือ Principle 14 ของ O³ Platform Constitution</p>
+  </div>
+</section>
+
+<!-- HOW AI USES -->
+<section id="how-ai-uses">
+  <div class="section-number">Section 03</div>
+  <h2>How AI Agents Should Use This Context</h2>
+  <p>เอกสารนี้ถูกออกแบบให้ <strong>AI Agent</strong> อ่านและเข้าใจบริบททั้งหมดของ O³ ก่อนสร้าง Output ใดๆ</p>
+
+  <div class="callout callout-ai">
+    <div class="callout-title">AI Instruction</div>
+    <p>ก่อนสร้าง Handbook, Product Spec, Developer Spec, Prototype หรือ Code — AI Agent ต้องอ่าน Master Context ทั้งหมดตามลำดับนี้: Vision → Business Model → Platform Overview → Product Portfolio → Platform Principles → Domain Model → OWDS → AI Strategy → Architecture → Dashboard Strategy → Subscription & CRM → Roadmap → Vocabulary → Decision Records</p>
+  </div>
+
+  <p>AI Agent ต้องเข้าใจว่า O³ ไม่ใช่แค่ Dashboard, HRIS, Chatbot หรือ Survey Tool — แต่เป็น <strong>Platform</strong> ที่มี Shared Foundation ร่วมกัน</p>
+</section>
+
+<!-- VISION -->
+<section id="vision">
+  <div class="section-number">Section 04</div>
+  <h2>O³ Vision & Mission</h2>
+
+  <h3>O³ คืออะไร</h3>
+  <p>O³ มาจาก <strong>3O Framework</strong>:</p>
+  <div class="card-grid">
+    <div class="card"><h4>❶ Observe</h4><p>เข้าใจบริบททางธุรกิจ ข้อมูลกำลังคน สัญญาณตลาด และสุขภาพองค์กร</p></div>
+    <div class="card"><h4>❷ Optimize</h4><p>ปรับปรุงการวางแผนกำลังคน ผลิตภาพ กระบวนการ และการตัดสินใจด้าน HR</p></div>
+    <div class="card"><h4>❸ Outcome</h4><p>สร้างผลลัพธ์ทางธุรกิจที่วัดผลได้ การเติบโต และการเปลี่ยนแปลงที่ดีขึ้น</p></div>
+  </div>
+
+  <h3>Positioning Statement</h3>
+  <p><strong>O³ ZONE ช่วย SME ไทยและผู้นำธุรกิจ เปลี่ยนข้อมูล HR และธุรกิจที่เรียบง่าย ให้เป็น Workforce Insights, AI Recommendations และ Action Plans ที่นำไปปฏิบัติได้จริง</strong></p>
+
+  <h3>O³ ไม่ใช่</h3>
+  <ul>
+    <li>❌ HRIS เต็มรูปแบบ</li>
+    <li>❌ ระบบ Payroll</li>
+    <li>❌ BI Dashboard ทั่วไป</li>
+    <li>❌ Chatbot ธรรมดา</li>
+    <li>❌ แพลตฟอร์ม Survey อย่างเดียว</li>
+    <li>❌ เว็บไซต์คอร์สเรียนอย่างเดียว</li>
+  </ul>
+
+  <h3>O³ คือ</h3>
+  <ul>
+    <li>✅ Workforce Intelligence Platform</li>
+    <li>✅ AI-Guided Decision Support System</li>
+    <li>✅ Data Standard และ Insight Engine สำหรับ HR และธุรกิจ</li>
+    <li>✅ Practical Toolkit สำหรับเจ้าของกิจการ ผู้บริหาร และทีม HR</li>
+    <li>✅ Future Benchmark Center สำหรับข้อมูลกำลังคนไทย</li>
+  </ul>
+</section>
+
+<!-- BUSINESS MODEL -->
+<section id="business-model">
+  <div class="section-number">Section 05</div>
+  <h2>Business Model</h2>
+
+  <h3>กลุ่มลูกค้าเป้าหมาย</h3>
+  <p>SME ไทยและบริษัทที่กำลังเติบโต <strong>50–500 คน</strong> ที่ยังไม่มีระบบ HR Analytics ที่แข็งแรง ใช้อุตสาหกรรมหลัก: <strong>Manufacturing, Trading, Service</strong></p>
+
+  <h3>Revenue Model</h3>
+  <table>
+    <tr><th>Package</th><th>ราคา</th><th>Features หลัก</th></tr>
+    <tr><td><strong>Basic</strong></td><td>Free</td><td>Limited Assessment, Sample Dashboard, Limited AI Credits, Basic Academy</td></tr>
+    <tr><td><strong>Starter</strong></td><td>Paid</td><td>Upload Template, Basic Dashboard, Limited AI Advisor, Basic Reports</td></tr>
+    <tr><td><strong>Professional</strong></td><td>Paid</td><td>Full Dashboard MVP, More AI Tools, Export Reports, More Credits</td></tr>
+    <tr><td><strong>Business</strong></td><td>Paid</td><td>Multi-User, Advanced Dashboard, Team Permissions, CRM & Action Tracking</td></tr>
+    <tr><td><strong>Enterprise</strong></td><td>Custom</td><td>Custom Integration, SSO, Advanced Security, Custom Dashboard, SLA</td></tr>
+  </table>
+
+  <h3>Revenue Streams</h3>
+  <ul>
+    <li>Monthly / Annual Subscription</li>
+    <li>AI Usage Credits</li>
+    <li>Paid Academy Courses</li>
+    <li>Setup & Onboarding Service</li>
+    <li>Custom Dashboard & Consulting</li>
+    <li>Enterprise Integration Fee</li>
+    <li>Benchmark Premium Access (Future)</li>
+  </ul>
+
+  <h3>Go-to-Market Path</h3>
+  <div class="diagram">
+    <div class="diagram-title">Sales Motion</div>
+    <div class="flow-horizontal">
+      <div class="flow-box">Free Content & Academy</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Free Assessment</div><div class="flow-arrow">→</div>
+      <div class="flow-box highlight">AI Insight Report</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Upgrade to Paid</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Setup Service</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Retention & Expansion</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT PORTFOLIO -->
+<section id="product-portfolio">
+  <div class="section-number">Section 06</div>
+  <h2>Product Portfolio</h2>
+
+  <div class="card-grid">
+    <div class="card"><h4>O³ Dashboard</h4><p>Insight Dashboard ไม่ใช่ BI — ทุก Widget มีคำอธิบาย ความเสี่ยง และ Action Plan</p></div>
+    <div class="card"><h4>O³ Workforce AI Studio</h4><p>ชุด AI Tools สำหรับ HR: JD Generator, CV Screening, Salary Designer, Workforce Planning และอื่นๆ</p></div>
+    <div class="card"><h4>O³ Survey Studio</h4><p>Employee Experience, Engagement, Pulse Survey — สร้างหลัง MVP (Future Phase)</p></div>
+    <div class="card"><h4>O³ Academy</h4><p>แหล่งเรียนรู้และ Lead Generation: Data-Driven HR, AI for Executives, ChatGPT for HR</p></div>
+    <div class="card"><h4>O³ Benchmark Center</h4><p>เปรียบเทียบข้อมูลกำลังคนแบบไม่ระบุตัวตน — Future Moat (Future Phase)</p></div>
+  </div>
+
+  <h3>Product Relationship: Assess → Advise → Accelerate</h3>
+  <div class="diagram">
+    <div class="diagram-title">Product Ecosystem</div>
+    <div class="flow-horizontal">
+      <div class="flow-box">📊 Assess<br><small>Dashboard + Survey</small></div><div class="flow-arrow">→</div>
+      <div class="flow-box highlight">🤖 Advise<br><small>AI Advisor + AI Tools</small></div><div class="flow-arrow">→</div>
+      <div class="flow-box">🚀 Accelerate<br><small>Academy + Templates</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM PRINCIPLES -->
+<section id="platform-principles">
+  <div class="section-number">Section 07</div>
+  <h2>Platform Principles (15 Principles)</h2>
+  <p>หลักการ 15 ข้อที่เป็นรากฐานของทุกการตัดสินใจด้าน Architecture, Product และ Engineering ใน O³ ZONE</p>
+
+  <div class="callout callout-principle">
+    <div class="callout-title">Key Principle 01</div>
+    <p><strong>One Source of Truth</strong> — ทุก Business Object ต้องมีแหล่งข้อมูลที่เชื่อถือได้เพียงหนึ่งเดียว Employee Master ต้องไม่ถูกทำซ้ำใน Dashboard, Survey, Academy และ AI Tools</p>
+  </div>
+  <div class="callout callout-principle">
+    <div class="callout-title">Key Principle 02</div>
+    <p><strong>Everything Starts from OWDS</strong> — O³ Workforce Data Standard คือภาษากลางสำหรับ Data Ingestion, Dashboard, AI, Survey และ Benchmark</p>
+  </div>
+  <div class="callout callout-principle">
+    <div class="callout-title">Key Principle 03</div>
+    <p><strong>API First</strong> — ทุก Product ต้องสื่อสารผ่าน API เท่านั้น Frontend ต้องไม่ต่อ Database โดยตรง AI ต้องไม่เรียก LLM โดยไม่ผ่าน AI Gateway</p>
+  </div>
+  <div class="callout callout-principle">
+    <div class="callout-title">Key Principle 04</div>
+    <p><strong>Insight First, Report Second</strong> — O³ ให้ความสำคัญกับการตีความทางธุรกิจ ความเสี่ยง ลำดับความสำคัญ และ Action Plan — ไม่ใช่แค่การแสดง Report</p>
+  </div>
+  <div class="callout callout-principle">
+    <div class="callout-title">Key Principle 05</div>
+    <p><strong>AI Must Explain</strong> — ทุก AI Recommendation ต้องระบุ เหตุผล หลักฐาน ระดับความเชื่อมั่น และข้อจำกัด</p>
+  </div>
+
+  <details style="margin:16px 0">
+    <summary style="cursor:pointer;font-weight:700;color:#c00">ดูทั้งหมด 15 Principles</summary>
+    <table style="margin-top:12px">
+      <tr><th>#</th><th>Principle</th><th>คำอธิบาย</th></tr>
+      <tr><td>06</td><td>Data Before AI</td><td>ถ้าข้อมูลขาดหรือคุณภาพต่ำ AI ต้องบอกว่าขาดอะไร ไม่ใช่เดา</td></tr>
+      <tr><td>07</td><td>Configuration Over Customization</td><td>ลูกค้าปรับแต่งผ่าน Configuration ไม่ใช่ Custom Code</td></tr>
+      <tr><td>08</td><td>Reusable Components</td><td>Widgets, Forms, Templates ใช้ซ้ำได้ทุก Product</td></tr>
+      <tr><td>09</td><td>Every Number Has Meaning</td><td>ทุก KPI ต้องมี Definition, Formula, Interpretation, Risk, Action</td></tr>
+      <tr><td>10</td><td>Benchmark Must Be Anonymous</td><td>ข้อมูล Benchmark ต้องไม่ระบุตัวตนและถูก Aggregate</td></tr>
+      <tr><td>11</td><td>Simple First Experience</td><td>ประสบการณ์แรกต้องง่าย — อัปโหลดไฟล์เดียว ได้ Insight ทันที</td></tr>
+      <tr><td>12</td><td>AI Is Everywhere, But Not Everything</td><td>AI สนับสนุนการตัดสินใจ ไม่ใช่แทนที่ Data Architecture หรือมนุษย์</td></tr>
+      <tr><td>13</td><td>Action Plan Required</td><td>ทุก Insight สำคัญต้องมี Action Plan ที่ทำตามได้</td></tr>
+      <tr><td>14</td><td>Documentation First</td><td>Architecture, Data Model, AI Rules ต้อง Document ก่อน Implement</td></tr>
+      <tr><td>15</td><td>Build for Learning</td><td>MVP ต้องเก็บ Usage Data เพื่อเรียนรู้ว่าอะไรสร้างคุณค่า</td></tr>
+    </table>
+  </details>
+</section>
+
+<!-- DOMAIN MODEL -->
+<section id="domain-model">
+  <div class="section-number">Section 08</div>
+  <h2>Domain Model</h2>
+  <p>ก่อนออกแบบ Database หรือ API — O³ ต้องกำหนด Business Objects ที่ประกอบกันเป็น Platform ก่อน นี่คือ <strong>Domain Model</strong> ที่อธิบายโลกของ O³ ในภาษาธุรกิจ</p>
+
+  <div class="card-grid">
+    <div class="card"><h4>🏢 Company</h4><p>Root Domain — เป็นเจ้าของ Users, Employees, Subscription และ Product Usage ทั้งหมด</p></div>
+    <div class="card"><h4>👤 Employee</h4><p>Core Workforce Object — เชื่อมกับ Performance, Compensation, Training, Exit, Survey</p></div>
+    <div class="card"><h4>📊 Insight</h4><p>Interpreted Layer — แปลข้อมูลดิบเป็นความหมายทางธุรกิจ ความเสี่ยง และลำดับความสำคัญ</p></div>
+    <div class="card"><h4>🤖 AI Advisor</h4><p>ไม่ใช่ Data Owner — อ่าน Context และสร้าง Recommendations จาก OWDS + Semantic Layer</p></div>
+    <div class="card"><h4>📈 Benchmark</h4><p>Anonymized Aggregated Data — ไม่ได้สร้างจาก Individual Records ที่ระบุตัวตนได้</p></div>
+  </div>
+
+  <h3>Core Domains</h3>
+  <table>
+    <tr><th>Domain</th><th>Key Entities</th><th>Relationships</th></tr>
+    <tr><td>Company</td><td>Company Profile, Industry, Size</td><td>Owns Users, Employees, Subscription</td></tr>
+    <tr><td>User</td><td>Founder, Executive, HR Admin, Manager</td><td>Belongs to Company, Has Role</td></tr>
+    <tr><td>Organization</td><td>Department, Position, Job Level, Location</td><td>Under Company, Contains Employees</td></tr>
+    <tr><td>Employee</td><td>Employee Master, Demographics</td><td>Core object — connects to all HR domains</td></tr>
+    <tr><td>Performance</td><td>Rating, Potential, Key Talent, Successor</td><td>Belongs to Employee</td></tr>
+    <tr><td>Compensation</td><td>Salary, Range, Grade, Bonus, Merit</td><td>Belongs to Employee</td></tr>
+    <tr><td>Training</td><td>Hours, Category, Cost, Completion</td><td>Belongs to Employee</td></tr>
+    <tr><td>Exit</td><td>Exit Date, Reason, Regrettable Loss</td><td>Belongs to Employee</td></tr>
+    <tr><td>Survey</td><td>Type, Question, Response, Score</td><td>Belongs to Employee</td></tr>
+    <tr><td>Subscription</td><td>Package, Entitlement, Credits, Renewal</td><td>Belongs to Company</td></tr>
+  </table>
+</section>
+
+<!-- OWDS -->
+<section id="owds">
+  <div class="section-number">Section 09</div>
+  <h2>OWDS — O³ Workforce Data Standard</h2>
+  <p><strong>OWDS</strong> คือมาตรฐานข้อมูลกลางที่ทำให้ O³ สามารถอ่านข้อมูลบริษัทจาก Excel, CSV, API, HRIS หรือ Manual Input และแปลงเป็นโครงสร้างเดียวกันสำหรับ Dashboard, AI, Survey และ Benchmark</p>
+
+  <div class="callout callout-decision">
+    <div class="callout-title">ADR-001: Use OWDS as Standard</div>
+    <p>หากไม่มี OWDS ข้อมูลลูกค้าทุกรายจะแตกต่างกัน — "Name" vs "Employee Name" vs "Staff Name" — ทำให้เกิดปัญหา Mapping และการวิเคราะห์ที่ไม่สอดคล้องกัน OWDS กำหนด Standard Fields เช่น Employee_ID, Department, Position, Salary, Start_Date, Exit_Date, Performance_Rating, Potential</p>
+  </div>
+
+  <h3>One Simple Company Data Template (7 Sheets)</h3>
+  <table>
+    <tr><th>Sheet</th><th>เนื้อหา</th><th>ใช้สำหรับ</th></tr>
+    <tr><td>1. Company_Profile</td><td>ข้อมูลบริษัท, Industry, Size</td><td>Context สำหรับ AI และ Benchmark</td></tr>
+    <tr><td>2. Employee_Master</td><td>รายชื่อพนักงาน, Department, Position, Salary</td><td>Workforce Snapshot, Headcount</td></tr>
+    <tr><td>3. Exit_Record</td><td>การลาออก, เหตุผล, Regrettable Loss</td><td>Turnover, Attrition Cost</td></tr>
+    <tr><td>4. Performance</td><td>Performance Rating, Potential, Key Talent</td><td>Talent & Performance Dashboard</td></tr>
+    <tr><td>5. Training</td><td>ชั่วโมงอบรม, Category, Cost</td><td>Learning & Development</td></tr>
+    <tr><td>6. Business_Output</td><td>Revenue, Output, Productivity</td><td>Productivity Dashboard</td></tr>
+    <tr><td>7. Short_Employee_Survey</td><td>Engagement, Workload, Satisfaction</td><td>Employee Sentiment</td></tr>
+  </table>
+
+  <h3>Regrettable Loss Logic</h3>
+  <p>การลาออกถูกจัดเป็น <strong>Regrettable Loss</strong> เมื่อเข้าเงื่อนไขข้อใดข้อหนึ่ง:</p>
+  <ul>
+    <li>Performance Rating สูง</li>
+    <li>Potential สูง</li>
+    <li>เป็น Key Talent</li>
+    <li>อยู่ใน Critical Position</li>
+    <li>Replacement Difficulty สูง</li>
+    <li>อยู่ใน Strategic Role</li>
+  </ul>
+</section>
+
+<!-- AI STRATEGY -->
+<section id="ai-strategy">
+  <div class="section-number">Section 10</div>
+  <h2>AI Strategy</h2>
+  <p>AI ใน O³ ไม่ใช่ Feature เดี่ยวๆ — แต่ถูกฝังอยู่ทั่วทั้ง Platform เพื่ออธิบาย แนะนำ สรุป สร้างเนื้อหา และชี้แนะ Action</p>
+
+  <h3>AI Gateway</h3>
+  <div class="callout callout-ai">
+    <div class="callout-title">AI Instruction</div>
+    <p>ทุก AI Call ต้องผ่าน <strong>AI Gateway</strong> เท่านั้น — Product Modules ห้ามเรียก LLM โดยตรง AI Gateway จัดการ: Model Selection, Prompt Templates, Context Injection, Usage Logging, Credits, Safety Rules, Output Schema, Error Handling, Cost Control</p>
+  </div>
+
+  <h3>AI Must Explain — Output Schema</h3>
+  <p>ทุก AI Recommendation ต้องมีโครงสร้าง:</p>
+  <div class="diagram">
+    <div class="flow-horizontal">
+      <div class="flow-box">Summary</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Evidence</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Interpretation</div><div class="flow-arrow">→</div>
+      <div class="flow-box highlight">Action</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Confidence</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Limitations</div>
+    </div>
+  </div>
+
+  <h3>AI Tools Pattern</h3>
+  <p>ทุก AI Tool ต้องทำตาม Pattern: <strong>Input → Validation → Context Retrieval → Prompt Execution → Structured Output → Explanation → Confidence → Action Plan → Export/Save</strong></p>
+
+  <h3>AI Guardrails</h3>
+  <div class="callout callout-warning">
+    <div class="callout-title">Warning</div>
+    <p>AI ต้องหลีกเลี่ยง: การให้คำแนะนำทางกฎหมายแรงงานแบบฟันธง, ข้อกล่าวอ้างที่ไม่มีหลักฐาน, การตัดสินเชิงลบต่อบุคคล, คำแนะนำที่เลือกปฏิบัติ, การเปิดเผยข้อมูลพนักงานรายบุคคลต่อผู้ไม่มีสิทธิ์</p>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-number">Section 11</div>
+  <h2>Architecture Overview</h2>
+
+  <h3>Platform Layers</h3>
+  <div class="diagram">
+    <div class="diagram-title">O³ Platform Architecture</div>
+    <div class="layers">
+      <div class="layer top"><div class="layer-label">Experience Layer</div>Website · Dashboard App · AI Studio · Survey Studio · Academy · Admin Portal</div>
+      <div class="layer"><div class="layer-label">Product Layer</div>Assessment · Upload · Dashboard · AI Advisor · AI Tools · Survey · Academy · Reports · Benchmark</div>
+      <div class="layer"><div class="layer-label">Intelligence Layer</div>Insight Engine · AI Gateway · AI Advisor · Action Plan Generator · Decision Knowledge Base · Semantic Layer</div>
+      <div class="layer"><div class="layer-label">Data Layer</div>OWDS · Metadata Standard · Event Model · Company Profile · Employee Master · Performance · Exit · Training · Survey · Business Output</div>
+      <div class="layer"><div class="layer-label">Platform Layer</div>Auth · Authorization · API Gateway · Database · File Storage · Logging · Monitoring · Subscription · Billing · CRM</div>
+    </div>
+  </div>
+
+  <h3>Data Flow</h3>
+  <div class="diagram">
+    <div class="diagram-title">Data Flow: Upload to Insight</div>
+    <div class="flow-horizontal">
+      <div class="flow-box">User Uploads Excel</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Upload API Stores File</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Validation Service</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Import to OWDS</div><div class="flow-arrow">→</div>
+      <div class="flow-box highlight">Insight Engine Calculates KPIs</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Dashboard API</div><div class="flow-arrow">→</div>
+      <div class="flow-box">AI Gateway → User</div>
+    </div>
+  </div>
+
+  <h3>MVP API Groups</h3>
+  <table>
+    <tr><th>API Group</th><th>Endpoints</th></tr>
+    <tr><td>Auth API</td><td>Sign up, Sign in, User Profile, Role & Permission</td></tr>
+    <tr><td>Company API</td><td>Create Company, Update Profile, Get Profile</td></tr>
+    <tr><td>Upload API</td><td>Upload OWDS Template, Validate, Import, Status</td></tr>
+    <tr><td>Workforce API</td><td>Employee Summary, Department Mix, Headcount Trend</td></tr>
+    <tr><td>Turnover API</td><td>Turnover Summary, Regrettable Loss, Exit Reasons, Attrition Cost</td></tr>
+    <tr><td>Dashboard API</td><td>Dashboard Layout, Widget Data, AI Summary</td></tr>
+    <tr><td>AI API</td><td>Ask AI Advisor, Run AI Tool, AI History, Credit Usage</td></tr>
+    <tr><td>Subscription API</td><td>Package, Entitlements, Credit Balance, Update</td></tr>
+  </table>
+</section>
+
+<!-- TECH STACK -->
+<section id="tech-stack">
+  <div class="section-number">Section 12</div>
+  <h2>Technology Stack</h2>
+  <table>
+    <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+    <tr><td>Frontend</td><td><strong>Next.js</strong></td><td>React Framework สำหรับ Web App และ API Routes</td></tr>
+    <tr><td>Backend/API</td><td><strong>Next.js API Routes</strong></td><td>API Layer สำหรับทุก Product</td></tr>
+    <tr><td>Database</td><td><strong>Supabase PostgreSQL</strong></td><td>ฐานข้อมูลหลัก พร้อม Row Level Security</td></tr>
+    <tr><td>Storage</td><td><strong>Supabase Storage</strong></td><td>ไฟล์อัปโหลดและ Assets</td></tr>
+    <tr><td>Authentication</td><td><strong>Supabase Auth</strong></td><td>ยืนยันตัวตนและจัดการ User</td></tr>
+    <tr><td>Hosting</td><td><strong>Vercel</strong></td><td>Deploy และ Hosting</td></tr>
+    <tr><td>AI</td><td><strong>OpenAI + Multi-Model Gateway</strong></td><td>LLM สำหรับ AI Advisor และ AI Tools</td></tr>
+    <tr><td>Repository</td><td><strong>GitHub</strong></td><td>Version Control และ CI/CD</td></tr>
+  </table>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="section-number">Section 13</div>
+  <h2>Roadmap</h2>
+
+  <h3>MVP Success Definition</h3>
+  <p>MVP สำเร็จเมื่อ:</p>
+  <ul>
+    <li>✅ User สร้าง Account ได้</li>
+    <li>✅ สร้าง Company Profile ได้</li>
+    <li>✅ อัปโหลด O³ Data Template ได้</li>
+    <li>✅ ระบบ Validate ไฟล์ได้</li>
+    <li>✅ ระบบสร้าง Workforce Snapshot ได้</li>
+    <li>✅ ระบบสร้าง Turnover และ Regrettable Loss Insights ได้</li>
+    <li>✅ AI สรุป Key Findings และ Action Plan ได้</li>
+    <li>✅ User เข้าใจคุณค่าภายในไม่กี่นาที</li>
+  </ul>
+
+  <h3>Sprint Roadmap</h3>
+  <table>
+    <tr><th>Sprint</th><th>Focus</th><th>Deliverables</th></tr>
+    <tr><td><strong>Sprint 0</strong></td><td>Foundation</td><td>Project Setup, Auth, Database Skeleton, API Skeleton, Design System Base, Logging, Package & Permission Base</td></tr>
+    <tr><td><strong>Sprint 1</strong></td><td>Company & Upload</td><td>Company Profile, Download Template, Upload, Validation, Import, Data Quality Dashboard</td></tr>
+    <tr><td><strong>Sprint 2</strong></td><td>Dashboard MVP</td><td>Workforce Snapshot, Department Mix, Turnover, Regrettable Loss, Cost of Attrition, AI Summary</td></tr>
+    <tr><td><strong>Sprint 3</strong></td><td>AI Advisor</td><td>AI Chat Interface, Company Context Retrieval, Insight Explanation, Action Plan Generation, AI Usage Tracking</td></tr>
+    <tr><td><strong>Sprint 4</strong></td><td>AI Studio MVP</td><td>JD Generator, Salary Structure Designer, Workforce Planning, Performance Writer</td></tr>
+    <tr><td><strong>Sprint 5</strong></td><td>Academy MVP</td><td>Course Catalog, Course Detail, Lesson Page, Progress Tracking, Free/Paid Course Logic</td></tr>
+    <tr><td><strong>Sprint 6</strong></td><td>Subscription & CRM</td><td>Package Management, AI Credits, Upgrade Flow, Usage Tracking, CRM Dashboard</td></tr>
+  </table>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">Do Not Build Yet</div>
+    <p>❌ Full Benchmark Center &nbsp; ❌ Full Survey Engine &nbsp; ❌ Enterprise Integration &nbsp; ❌ Advanced HRIS Connector &nbsp; ❌ Custom Report Builder &nbsp; ❌ Full Marketplace</p>
+  </div>
+</section>
+
+<!-- VOCABULARY -->
+<section id="vocabulary">
+  <div class="section-number">Section 14</div>
+  <h2>Vocabulary / Glossary</h2>
+
+  <table>
+    <tr><th>คำศัพท์</th><th>ความหมาย</th><th>การใช้งาน</th></tr>
+    <tr><td><strong>O³ ZONE</strong></td><td>AI-powered Workforce Intelligence Platform</td><td>ชื่อ Platform หลัก</td></tr>
+    <tr><td><strong>OWDS</strong></td><td>O³ Workforce Data Standard</td><td>มาตรฐานข้อมูลกลางของ Platform</td></tr>
+    <tr><td><strong>ODKB</strong></td><td>O³ Decision Knowledge Base</td><td>คลังความรู้สำหรับการตัดสินใจด้าน HR</td></tr>
+    <tr><td><strong>AI Gateway</strong></td><td>Centralized AI Routing & Governance Layer</td><td>จุดควบคุม AI Calls ทั้งหมด</td></tr>
+    <tr><td><strong>Semantic Layer</strong></td><td>KPI และ Business Meaning Layer</td><td>แปลข้อมูลดิบเป็นความหมายทางธุรกิจ</td></tr>
+    <tr><td><strong>Event Model</strong></td><td>Timeline of Business & Workforce Events</td><td>ติดตามเหตุการณ์สำคัญด้านกำลังคน</td></tr>
+    <tr><td><strong>Domain Model</strong></td><td>Business Objects & Relationships</td><td>โมเดลธุรกิจก่อนออกแบบ Database</td></tr>
+    <tr><td><strong>Insight Engine</strong></td><td>KPI Calculation & Interpretation Engine</td><td>คำนวณและตีความ KPI</td></tr>
+    <tr><td><strong>Regrettable Loss</strong></td><td>การสูญเสียพนักงานที่มีคุณค่าต่อองค์กร</td><td>แยกจาก Turnover ทั่วไป</td></tr>
+    <tr><td><strong>Workforce Intelligence</strong></td><td>ข้อมูลเชิงลึกด้านกำลังคนที่นำไปใช้ตัดสินใจได้</td><td>Main Category ของ O³</td></tr>
+    <tr><td><strong>3O Framework</strong></td><td>Observe → Optimize → Outcome</td><td>กรอบแนวคิดหลักของ O³</td></tr>
+    <tr><td><strong>One Simple Template</strong></td><td>Excel Template 7 Sheets สำหรับ MVP</td><td>วิธีหลักในการนำเข้าข้อมูล</td></tr>
+  </table>
+</section>
+
+<!-- DECISIONS -->
+<section id="decisions">
+  <div class="section-number">Section 15</div>
+  <h2>Decision Records (ADR)</h2>
+  <p>บันทึกการตัดสินใจด้าน Architecture และ Product ที่สำคัญของ O³</p>
+
+  <table>
+    <tr><th>ADR</th><th>Decision</th><th>Reason</th></tr>
+    <tr><td>ADR-001</td><td>ใช้ OWDS เป็น Workforce Data Standard</td><td>ข้อมูลลูกค้ามีหลายรูปแบบ ต้องมีมาตรฐานกลาง</td></tr>
+    <tr><td>ADR-002</td><td>API First Architecture</td><td>ทุก Product ต้องสื่อสารผ่าน API เพื่อความสอดคล้องและปลอดภัย</td></tr>
+    <tr><td>ADR-003</td><td>Insight First Philosophy</td><td>SME ต้องการคำตอบ ไม่ใช่เครื่องมือวิเคราะห์ที่ซับซ้อน</td></tr>
+    <tr><td>ADR-004</td><td>Dashboard ไม่ใช่ BI</td><td>O³ แข่งขันด้วย Workforce Interpretation ไม่ใช่ Report Visualization</td></tr>
+    <tr><td>ADR-005</td><td>Survey Studio ไม่ใช่ MVP Core</td><td>Survey Engine เต็มรูปแบบเป็น Product ในตัวเอง ต้องสร้างหลัง MVP</td></tr>
+    <tr><td>ADR-006</td><td>Benchmark Center เป็น Future Moat</td><td>ต้องมีข้อมูลลูกค้ามากพอก่อนจึงจะสร้าง Benchmark ที่มีคุณค่า</td></tr>
+    <tr><td>ADR-007</td><td>ใช้ One Simple Template สำหรับ MVP</td><td>SME อาจไม่มี HRIS — Excel เข้าถึงง่ายกว่า</td></tr>
+    <tr><td>ADR-008</td><td>AI Gateway Required</td><td>ต้องควบคุม Cost, Model, Logging, Prompt, Output Schema และ Permission</td></tr>
+  </table>
+</section>
+
+<!-- PROMPT -->
+<section id="prompt">
+  <div class="section-number">Section 16</div>
+  <h2>Prompt for Future AI Agents</h2>
+
+  <div class="callout callout-ai">
+    <div class="callout-title">AI Instruction — Generate O³ Platform Operating Manual</div>
+    <p>คุณคือ Chief Architect และ Chief Documentation Officer ของ O³ ZONE</p>
+    <p>อ่านและทำตาม O³ Master Context ทั้งหมดก่อนสร้าง Output ใดๆ</p>
+    <p>O³ ZONE คือ AI-powered Workforce Intelligence Platform สำหรับ SME ไทย — ไม่ใช่แค่ Dashboard, HRIS, Chatbot, Survey Tool หรือ Academy Site</p>
+    <p><strong>Task:</strong> สร้าง O³ Platform Operating Manual เป็น Markdown Files ในโครงสร้าง:</p>
+    <ul>
+      <li>19 Books (Book 00–19) ครอบคลุม Platform Overview, Constitution, Business Architecture, Domain Model, Capability Map, Information Architecture, OWDS, Metadata, Semantic Layer, Event Model, API Standards, Database, AI Architecture, Dashboard Engine, Design System, Security, DevOps, Product Specs, Business Knowledge, Engineering Handbook</li>
+      <li>Supporting directories: knowledge/, adr/, patterns/, templates/, diagrams/, assets/</li>
+    </ul>
+    <p>ทุก Chapter ต้องมี: Purpose, Background, Principles, Business Rules, Architecture Impact, AI Impact, Best Practices, Anti-patterns, Cross References, Future Considerations</p>
+    <p>ห้ามใช้ Placeholder Text — ถ้า Section ยังไม่พร้อม ให้ระบุเป็น Draft และอธิบายว่าต้องการ Validation อะไรเพิ่ม</p>
+  </div>
+</section>
+
+<!-- PART X: IMPLEMENTATION ROADMAP -->
+<section id="implementation-roadmap">
+  <div class="section-number">Part X — Section 17</div>
+  <h2>Implementation Roadmap & AI Operating Instructions</h2>
+  <p>บทนี้กำหนดลำดับการทำงานที่ชัดเจนสำหรับ AI Agent หลังจากอ่านและเข้าใจ O³ Master Context แล้ว — ต้องทำอะไรต่อ ตามลำดับใด และต้องส่งมอบอะไร</p>
+
+  <h3>1. What to Do After Reading This File</h3>
+  <div class="callout callout-ai">
+    <div class="callout-title">AI Instruction</div>
+    <p>AI Agent ต้องอ่าน Master Context ให้ครบทุก Section ก่อนเริ่มสร้างเอกสารหรือระบบใดๆ ห้ามข้ามไปสร้าง Product Specs หรือ Code ก่อนเข้าใจ Domain Model, OWDS, AI Strategy และ Architecture โดยสมบูรณ์</p>
+  </div>
+
+  <h3>2. Required Build Sequence</h3>
+  <p>ลำดับการสร้างเอกสารและระบบของ O³ ZONE — จาก Foundation ไปจนถึง Production Release:</p>
+
+  <div class="diagram">
+    <div class="diagram-title">Build Sequence: Master Context → Production</div>
+    <div class="flow-vertical" style="align-items:stretch;max-width:600px;margin:0 auto">
+      <div class="flow-box" style="border-color:#c00;background:#fef5f5">1. Master Context</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">2. Platform Operating Manual</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">3–22. Book 00 → Book 19</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">23. Product Specs</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">24. Developer Specs</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">25. Prototype</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">26. Database Schema</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">27. API Implementation</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">28. Frontend</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">29. Backend</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box">30. QA</div>
+      <div class="flow-arrow" style="text-align:center">↓</div>
+      <div class="flow-box highlight">31. Release</div>
+    </div>
+  </div>
+
+  <details style="margin:16px 0">
+    <summary style="cursor:pointer;font-weight:700;color:#c00">ดูรายละเอียด Build Sequence ทั้ง 31 ขั้นตอน</summary>
+    <table style="margin-top:12px">
+      <tr><th>#</th><th>Step</th><th>Description</th></tr>
+      <tr><td>1</td><td>Master Context</td><td>เอกสารกลางที่รวบรวม Vision, Strategy, Architecture ทั้งหมด</td></tr>
+      <tr><td>2</td><td>Platform Operating Manual</td><td>โครงสร้าง Repository และ Book Index</td></tr>
+      <tr><td>3</td><td>Book 00 — Platform Overview</td><td>ภาพรวม Platform, Products, Layers, MVP Scope</td></tr>
+      <tr><td>4</td><td>Book 01 — Platform Constitution</td><td>15 Principles ที่เป็นรากฐานของทุกการตัดสินใจ</td></tr>
+      <tr><td>5</td><td>Book 02 — Business Architecture</td><td>Target Customers, Revenue Model, GTM Strategy</td></tr>
+      <tr><td>6</td><td>Book 03 — Domain Model</td><td>Business Objects และ Relationships</td></tr>
+      <tr><td>7</td><td>Book 04 — Business Capability Map</td><td>ความสามารถทางธุรกิจของ Platform</td></tr>
+      <tr><td>8</td><td>Book 05 — Information Architecture</td><td>Data Flow, Classification, Lifecycle</td></tr>
+      <tr><td>9</td><td>Book 06 — OWDS</td><td>O³ Workforce Data Standard</td></tr>
+      <tr><td>10</td><td>Book 07 — Metadata Standard</td><td>Field Definitions, Sensitivity, Quality Rules</td></tr>
+      <tr><td>11</td><td>Book 08 — Semantic Layer</td><td>KPI Definitions, Business Meaning, Risk Thresholds</td></tr>
+      <tr><td>12</td><td>Book 09 — Event Model</td><td>Workforce Events, Timeline, Audit Trail</td></tr>
+      <tr><td>13</td><td>Book 10 — API Standards</td><td>REST Conventions, Versioning, Error Handling</td></tr>
+      <tr><td>14</td><td>Book 11 — Database Architecture</td><td>Schema Design, RLS, Migrations, Indexing</td></tr>
+      <tr><td>15</td><td>Book 12 — AI Architecture</td><td>AI Gateway, Context Layer, Prompt Engineering</td></tr>
+      <tr><td>16</td><td>Book 13 — Dashboard Engine</td><td>Widget Pattern, KPI Rendering, AI Integration</td></tr>
+      <tr><td>17</td><td>Book 14 — UX/UI Design System</td><td>Components, Design Tokens, Accessibility</td></tr>
+      <tr><td>18</td><td>Book 15 — Security Architecture</td><td>Auth, RLS, PDPA, Encryption, Audit</td></tr>
+      <tr><td>19</td><td>Book 16 — DevOps</td><td>CI/CD, Infrastructure, Monitoring, Logging</td></tr>
+      <tr><td>20</td><td>Book 17 — Product Specifications</td><td>User Stories, Features, Acceptance Criteria</td></tr>
+      <tr><td>21</td><td>Book 18 — Business Knowledge Framework</td><td>ODKB, Decision Rules, Action Playbooks</td></tr>
+      <tr><td>22</td><td>Book 19 — Engineering Handbook</td><td>Coding Standards, Testing, Code Review, Git</td></tr>
+      <tr><td>23</td><td>Product Specs</td><td>Detailed feature specifications per product</td></tr>
+      <tr><td>24</td><td>Developer Specs</td><td>Technical implementation specifications</td></tr>
+      <tr><td>25</td><td>Prototype</td><td>Clickable prototype for validation</td></tr>
+      <tr><td>26</td><td>Database Schema</td><td>Physical database implementation</td></tr>
+      <tr><td>27</td><td>API Implementation</td><td>REST API endpoints implementation</td></tr>
+      <tr><td>28</td><td>Frontend</td><td>Next.js UI implementation</td></tr>
+      <tr><td>29</td><td>Backend</td><td>Business logic and services</td></tr>
+      <tr><td>30</td><td>QA</td><td>Testing, validation, bug fixing</td></tr>
+      <tr><td>31</td><td>Release</td><td>Production deployment</td></tr>
+    </table>
+  </details>
+
+  <h3>3. Release Plan</h3>
+  <p>แบ่งการทำงานเป็น Release เพื่อให้สามารถตรวจสอบและ Validate ได้ทีละขั้น:</p>
+
+  <table>
+    <tr><th>Release</th><th>Books</th><th>Focus</th></tr>
+    <tr><td><strong>Release 0.1</strong></td><td>Book 00, 01, 02</td><td>Foundation — Platform Overview, Constitution, Business Architecture</td></tr>
+    <tr><td><strong>Release 0.2</strong></td><td>Book 03, 04, 05</td><td>Structure — Domain Model, Capability Map, Information Architecture</td></tr>
+    <tr><td><strong>Release 0.3</strong></td><td>Book 06, 07, 08, 09</td><td>Data — OWDS, Metadata, Semantic Layer, Event Model</td></tr>
+    <tr><td><strong>Release 0.4</strong></td><td>Book 10, 11, 12</td><td>Technical Core — API Standards, Database, AI Architecture</td></tr>
+    <tr><td><strong>Release 0.5</strong></td><td>Book 13, 14, 15, 16</td><td>Implementation — Dashboard, Design System, Security, DevOps</td></tr>
+    <tr><td><strong>Release 0.6</strong></td><td>Book 17, 18, 19</td><td>Execution — Product Specs, Business Knowledge, Engineering Handbook</td></tr>
+    <tr><td><strong>Release 1.0</strong></td><td>Product Specs, Developer Specs, Prototype, MVP Build Plan</td><td>Production Ready — จากเอกสารสู่การสร้างจริง</td></tr>
+  </table>
+
+  <div class="callout callout-decision">
+    <div class="callout-title">Important Decision</div>
+    <p>แต่ละ Release ต้องผ่านการ Review และ Validate ก่อนเริ่ม Release ถัดไป ห้ามข้าม Release หรือรวม Release โดยไม่ได้รับอนุมัติ</p>
+  </div>
+</section>
+
+<!-- PART X: AI OPERATING INSTRUCTIONS -->
+<section id="ai-operating-instructions">
+  <div class="section-number">Part X — Section 18</div>
+  <h2>AI Operating Instructions</h2>
+
+  <h3>4. Rules for AI Agents</h3>
+  <p>กฎที่ AI Agent ทุกตัวต้องปฏิบัติตามเมื่อทำงานกับ O³ ZONE:</p>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">Critical Rules</div>
+  </div>
+
+  <table>
+    <tr><th>#</th><th>Rule</th><th>คำอธิบาย</th></tr>
+    <tr><td>1</td><td>Do not create Product Specs before reading the Master Context</td><td>Product Specs ต้องอ้างอิง Domain Model, OWDS และ Architecture ที่กำหนดไว้แล้ว</td></tr>
+    <tr><td>2</td><td>Do not invent new product names</td><td>ใช้ชื่อที่กำหนดใน Master Context เท่านั้น: O³ Dashboard, O³ Workforce AI Studio, O³ Survey Studio, O³ Academy, O³ Benchmark Center</td></tr>
+    <tr><td>3</td><td>Use O³ vocabulary consistently</td><td>ใช้คำศัพท์ตาม Vocabulary/Glossary — Workforce Intelligence, Insight, Action Plan, AI Advisor, OWDS, Semantic Layer</td></tr>
+    <tr><td>4</td><td>Markdown is the source of truth</td><td>เอกสารทั้งหมดต้องเขียนเป็น Markdown ก่อน — HTML สร้างจาก Markdown ทีหลัง</td></tr>
+    <tr><td>5</td><td>HTML is generated from Markdown</td><td>ห้ามสร้าง HTML โดยไม่มี Markdown ต้นทาง</td></tr>
+    <tr><td>6</td><td>Every Book must reference related Books</td><td>ทุก Book ต้องมี Cross References ไปยัง Books ที่เกี่ยวข้อง</td></tr>
+    <tr><td>7</td><td>Every technical decision must connect to an ADR</td><td>การตัดสินใจด้านเทคนิคที่สำคัญต้องมี ADR รองรับ</td></tr>
+    <tr><td>8</td><td>Every data concept must connect to OWDS</td><td>แนวคิดด้านข้อมูลทุกอย่างต้องอ้างอิง OWDS</td></tr>
+    <tr><td>9</td><td>Every KPI must connect to the Semantic Layer</td><td>ทุก KPI ต้องมี Definition, Formula, Interpretation ใน Semantic Layer</td></tr>
+    <tr><td>10</td><td>Every AI feature must explain its reasoning</td><td>AI ต้องอธิบาย Summary, Evidence, Interpretation, Action, Confidence, Limitations</td></tr>
+    <tr><td>11</td><td>If data is insufficient, AI must say so</td><td>AI ต้องไม่เดา — ต้องระบุว่าข้อมูลอะไรขาด และอะไรที่ยังพอสรุปได้</td></tr>
+    <tr><td>12</td><td>Do not skip Domain Model, OWDS, API, or AI Architecture</td><td>4 เสาหลักนี้ต้องมาก่อนการสร้าง Product Specs หรือ Code เสมอ</td></tr>
+  </table>
+
+  <h3>5. Definition of Done</h3>
+  <p>เอกสารแต่ละ Book จะถือว่า <strong>Done</strong> เมื่อมีองค์ประกอบครบดังนี้:</p>
+
+  <div class="card-grid">
+    <div class="card"><h4>✅ README.md</h4><p>ภาพรวมของ Book — Purpose, Chapters, Key Takeaways</p></div>
+    <div class="card"><h4>✅ index.md</h4><p>สารบัญและเนื้อหาหลักของทุก Chapter</p></div>
+    <div class="card"><h4>✅ chapters/</h4><p>แต่ละ Chapter แยกเป็นไฟล์ พร้อมเนื้อหาครบถ้วน</p></div>
+    <div class="card"><h4>✅ diagrams/</h4><p>Mermaid diagrams สำหรับ Architecture, Data Flow, AI Flow</p></div>
+    <div class="card"><h4>✅ glossary</h4><p>คำศัพท์เฉพาะที่ใช้ใน Book นั้นๆ</p></div>
+    <div class="card"><h4>✅ ADR references</h4><p>อ้างอิง ADR ที่เกี่ยวข้องกับเนื้อหา</p></div>
+    <div class="card"><h4>✅ cross references</h4><p>เชื่อมโยงไปยัง Books อื่นที่เกี่ยวข้อง</p></div>
+    <div class="card"><h4>✅ Mermaid diagrams</h4><p>ไดอะแกรมที่จำเป็นในรูปแบบ Mermaid</p></div>
+    <div class="card"><h4>✅ Markdown complete</h4><p>เนื้อหา Markdown สมบูรณ์ ไม่มี Placeholder</p></div>
+    <div class="card"><h4>✅ HTML generated</h4><p>สร้าง HTML จาก Markdown สำหรับอ่านแบบ Web</p></div>
+    <div class="card"><h4>✅ version updated</h4><p>อัปเดต Version และ CHANGELOG</p></div>
+  </div>
+
+  <h3>6. Final AI Instruction</h3>
+  <div class="callout callout-founder">
+    <div class="callout-title">Final Instruction for All AI Agents</div>
+    <p style="font-size:1.05rem;line-height:1.8">
+      <strong>You now understand the O³ Platform.</strong><br>
+      Do not start from product features.<br>
+      Start from the Platform Operating Manual.<br>
+      Follow the build sequence.<br>
+      Preserve the architecture.<br>
+      When in doubt, ask before changing foundational principles.
+    </p>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">AI Agent Decision Flow</div>
+    <div class="flow-horizontal">
+      <div class="flow-box">Read Master Context</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Read Platform Operating Manual</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Follow Build Sequence</div><div class="flow-arrow">→</div>
+      <div class="flow-box highlight">Preserve Architecture</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Ask Before Changing</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-item"><strong>Version</strong>v1.0 Draft</div>
+    <div class="footer-item"><strong>Status</strong>Living Context Document</div>
+    <div class="footer-item"><strong>Owner</strong>O³ ZONE</div>
+    <div class="footer-item"><strong>Usage</strong>For Founder, AI Agent, Developer, Product Team</div>
+    <div class="footer-item"><strong>Last Updated</strong>June 2026</div>
+    <div class="footer-item"><strong>License</strong>Internal — O³ ZONE</div>
+  </div>
+  <p style="margin-top:24px;color:#bbb;font-size:0.75rem">O³ ZONE — AI-powered Workforce Intelligence Platform for Thai SMEs. Insight First. Data Before AI. AI Must Explain.</p>
+</footer>
+
+</main>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" title="Back to Top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Back to Top visibility
+const btn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// Active sidebar link
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+</body>
+</html>
