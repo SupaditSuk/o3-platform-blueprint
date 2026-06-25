@@ -117,9 +117,11 @@ pie title Repository Completion (21 Books)
 | Item | Status |
 |------|--------|
 | Branch | `main` |
-| Last Commit | `639bf3d` — Architecture Foundation v1.0 |
+| Last Commit | `26ce123` — Restore website files + Architecture Foundation documentation |
 | Tag | `v1.0-architecture-foundation` |
-| Remote | Not configured |
+| Remotes | `origin` (o3-zone-website), `blueprint` (o3-platform-blueprint) |
+| GitHub (website) | https://github.com/SupaditSuk/o3-zone-website |
+| GitHub (docs) | https://github.com/SupaditSuk/o3-platform-blueprint |
 
 ---
 
